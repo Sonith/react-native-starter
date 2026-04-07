@@ -1,38 +1,69 @@
 import { Stack } from 'expo-router';
-import { View, TouchableOpacity } from 'react-native';
-import { TodoProvider } from '@/context/todo-context';
+import { View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { AddTodo } from '@/components/add-todo';
 import { TodoList } from '@/components/todo-list';
-import { useTodo } from '@/context/todo-context';
 import { Box } from '@/components/ui/box';
 import { Text } from '@/components/ui/text';
+import { Button, ButtonText } from '@/components/ui/button';
+import {
+  useTodos,
+  useAddTodo,
+  useToggleTodo,
+  useDeleteTodo,
+  useClearCompleted,
+} from '@/hooks/use-todos';
 
 export default function TodoScreen() {
-  const { todos, addTodo, toggleTodo, deleteTodo, clearCompleted } = useTodo();
+  const { top } = useSafeAreaInsets();
+  const { data: todos = [], isLoading } = useTodos();
+  const addTodoMutation = useAddTodo();
+  const toggleTodoMutation = useToggleTodo();
+  const deleteTodoMutation = useDeleteTodo();
+  const clearCompletedMutation = useClearCompleted();
 
   const completedCount = todos.filter((t) => t.completed).length;
   const totalCount = todos.length;
+
+  if (isLoading) {
+    return (
+      <View className="flex-1 items-center justify-center">
+        <Text className="text-typography-500">Loading todos...</Text>
+      </View>
+    );
+  }
 
   return (
     <View className="flex-1">
       <Stack.Screen options={{ title: 'My Todos' }} />
 
-      <Box className="p-6 items-center gap-2">
-        <Text className="text-3xl font-bold">Todo List</Text>
+      <Box style={{ paddingTop: top + 24 }} className="pb-4 px-6 items-center gap-1 border-b border-outline-100">
+        <Text className="text-3xl font-bold text-typography-900">Todo List</Text>
         {totalCount > 0 && (
-          <Text className="text-md text-typography500">
-            {completedCount}/{totalCount} completed
+          <Text size="sm" className="text-typography-400">
+            {completedCount} of {totalCount} completed
           </Text>
         )}
       </Box>
 
-      <AddTodo onAdd={addTodo} />
-      <TodoList todos={todos} onToggle={toggleTodo} onDelete={deleteTodo} />
+      <AddTodo onAdd={(text) => addTodoMutation.mutate(text)} />
+      <TodoList
+        todos={todos}
+        onToggle={(id) => toggleTodoMutation.mutate(id)}
+        onDelete={(id) => deleteTodoMutation.mutate(id)}
+      />
 
       {completedCount > 0 && (
-        <TouchableOpacity className="p-6 items-center" onPress={clearCompleted} activeOpacity={0.7}>
-          <Text className="text-error500">Clear completed</Text>
-        </TouchableOpacity>
+        <Box className="px-4 pb-6 pt-2">
+          <Button
+            variant="outline"
+            action="negative"
+            size="md"
+            className="w-full"
+            onPress={() => clearCompletedMutation.mutate()}>
+            <ButtonText>Clear {completedCount} completed</ButtonText>
+          </Button>
+        </Box>
       )}
     </View>
   );

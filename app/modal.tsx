@@ -1,34 +1,17 @@
-import { View } from 'react-native';
-import { Stack } from 'expo-router';
-import { Text } from '@/components/themed-text';
-import { Link } from 'expo-router';
-import { useThemeColor } from '@/hooks/use-theme-color';
+import { Text } from "@/components/ui/text";
+import { Link, Stack } from "expo-router";
+import { View } from "react-native";
 
 export default function ModalScreen() {
-  const backgroundColor = useThemeColor({}, 'background');
-
   return (
-    <View style={[styles.container, { backgroundColor }]}>
-      <Stack.Screen options={{ title: 'Modal' }} />
-      <Text type="title" style={{ color: useThemeColor({}, 'typography') }}>
+    <View className="flex-1 items-center justify-center p-6">
+      <Stack.Screen options={{ title: "Modal" }} />
+      <Text className="text-2xl font-bold text-typography-900 mb-4">
         This is a modal
       </Text>
-      <Link href="/" dismissTo style={styles.link}>
-        <Text type="link">Go to home screen</Text>
+      <Link href="/" dismissTo className="mt-6 py-4">
+        <Text className="text-primary-500 underline">Go to home screen</Text>
       </Link>
     </View>
   );
 }
-
-const styles = {
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: 20,
-  },
-  link: {
-    marginTop: 15,
-    paddingVertical: 15,
-  },
-};

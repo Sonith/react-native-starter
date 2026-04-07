@@ -4,7 +4,12 @@ import { Box } from '@/components/ui/box';
 import { Text } from '@/components/ui/text';
 import { HStack } from '@/components/ui/hstack';
 import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
+import { Check, X } from 'lucide-react-native';
+import { cssInterop } from 'nativewind';
 import { type Todo } from '@/types/todo';
+
+cssInterop(Check, { className: { target: 'style', nativeStyleToProp: { color: true } } });
+cssInterop(X, { className: { target: 'style', nativeStyleToProp: { color: true } } });
 
 type TodoItemProps = {
   todo: Todo;
@@ -15,36 +20,27 @@ type TodoItemProps = {
 export function TodoItem({ todo, onToggle, onDelete }: TodoItemProps) {
   return (
     <Animated.View entering={FadeIn} exiting={FadeOut}>
-      <Pressable onPress={onToggle} className="active:opacity-70">
-        <Box
-          className="p-4 mx-4 my-1 rounded-xl bg-background shadow-sm"
-          shadowColor="$shadowColor"
-          shadowOffset={{ width: 0, height: 1 }}
-          shadowOpacity={0.05}
-          shadowRadius={2}
-          elevation={1}>
-          <HStack className="flex-1 items-center">
+      <Pressable onPress={onToggle} className="data-[active=true]:opacity-70">
+        <Box className="p-4 mx-4 my-1 rounded-xl bg-background-0 shadow-soft-1">
+          <HStack className="w-full items-center">
             <Box
-              className="w-6 h-6 rounded-full border-2 items-center justify-center"
-              style={{
-                borderColor: todo.completed ? '#52c41a' : '$outline',
-              }}>
+              className={`w-6 h-6 rounded-full border-2 items-center justify-center ${
+                todo.completed ? 'border-success-500' : 'border-outline-300'
+              }`}>
               {todo.completed && (
-                <Text className="text-success500 font-bold">✓</Text>
+                <Check size={14} className="text-success-500" />
               )}
             </Box>
             <Text
-              className="flex-1 ml-3 text-md"
-              style={{
-                color: todo.completed ? '#8c8c8c' : 'inherit',
-                textDecorationLine: todo.completed ? 'line-through' : 'none',
-              }}>
+              className={`flex-1 ml-3 ${
+                todo.completed ? 'text-typography-400 line-through' : 'text-typography-900'
+              }`}>
               {todo.text}
             </Text>
+            <Pressable onPress={onDelete} className="ml-2 p-1 data-[active=true]:opacity-70">
+              <X size={16} className="text-error-500" />
+            </Pressable>
           </HStack>
-          <Pressable onPress={onDelete} className="active:opacity-70">
-            <Text className="text-error500 ml-2">✕</Text>
-          </Pressable>
         </Box>
       </Pressable>
     </Animated.View>

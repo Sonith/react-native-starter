@@ -15,7 +15,7 @@ export function TodoList({ todos, onToggle, onDelete }: TodoListProps) {
   if (todos.length === 0) {
     return (
       <Box className="flex-1 items-center justify-center mt-16">
-        <Text className="text-md text-typography500">No todos yet. Add one above!</Text>
+        <Text size="md" className="text-typography-500">No todos yet. Add one above!</Text>
       </Box>
     );
   }

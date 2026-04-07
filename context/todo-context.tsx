@@ -26,10 +26,9 @@ export function TodoProvider({ children }: { children: ReactNode }) {
 
   const toggleTodo = (id: string) => {
     setTodos((prev) =>
-      prev.map((todo) => ({
-        ...todo,
-        completed: !todo.completed,
-      }))
+      prev.map((todo) =>
+        todo.id === id ? { ...todo, completed: !todo.completed } : todo
+      )
     );
   };
 
