@@ -6,19 +6,20 @@ import { Text } from '@/components/ui/text';
 import { useAuth } from '@/context/auth-context';
 
 export default function AdminLayout() {
-  const { isLoggedIn, role } = useAuth();
+  const { isLoggedIn, isLoading, role } = useAuth();
   const router = useRouter();
   const pathname = usePathname();
 
   useEffect(() => {
+    if (isLoading) return;
     if (!isLoggedIn) {
-      router.replace('/protected/login');
+      router.replace('/login');
     } else if (role !== 'admin') {
       router.replace('/protected');
     }
-  }, [isLoggedIn, role, router, pathname]);
+  }, [isLoggedIn, isLoading, role, router, pathname]);
 
-  if (!isLoggedIn || role !== 'admin') {
+  if (isLoading || !isLoggedIn || role !== 'admin') {
     return (
       <View className="flex-1 items-center justify-center">
         <ActivityIndicator size="large" />
@@ -30,17 +31,10 @@ export default function AdminLayout() {
   return (
     <Stack
       screenOptions={{
-        headerStyle: {
-          backgroundColor: '#7c3aed',
-        },
+        headerStyle: { backgroundColor: '#7c3aed' },
         headerTintColor: '#fff',
       }}>
-      <Stack.Screen
-        name="settings"
-        options={{
-          title: 'Admin Settings',
-        }}
-      />
+      <Stack.Screen name="settings" options={{ title: 'Admin Settings' }} />
     </Stack>
   );
 }

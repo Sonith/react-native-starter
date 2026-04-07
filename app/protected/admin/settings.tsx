@@ -11,44 +11,40 @@ export default function AdminSettings() {
   const { logout } = useAuth();
 
   return (
-    <View className="flex-1 bg-background p-6">
+    <View className="flex-1 p-6">
       <Stack.Screen options={{ title: 'Admin Settings' }} />
 
       <VStack className="gap-4 mt-4">
-        <Box className="p-4 bg-warning-500/10 border-l-4 border-warning-500 rounded-lg">
-          <Text className="text-xl font-bold text-warning-500 mb-2">
-            Admin Access Only
-          </Text>
-          <Text className="text-base text-typography-500">
-            You have admin-level access to this section. Regular users are
-            redirected here.
+        <Box className="p-4 bg-warning-50 border-l-4 border-warning-500 rounded-lg">
+          <Text className="text-xl font-bold text-warning-600 mb-2">Admin Access Only</Text>
+          <Text className="text-typography-500">
+            You have admin-level access to this section. Regular users are redirected away.
           </Text>
         </Box>
 
-        <Box className="p-4 bg-card rounded-lg">
-          <Text className="text-lg font-bold mb-3">Admin Controls</Text>
+        <Box className="p-4 bg-background-0 rounded-lg border border-outline-100">
+          <Text className="text-lg font-bold mb-3 text-typography-900">Admin Controls</Text>
           <VStack className="gap-3">
             <Button variant="outline" onPress={() => {}}>
-              <ButtonText className="text-base">User Management</ButtonText>
+              <ButtonText>User Management</ButtonText>
             </Button>
             <Button variant="outline" onPress={() => {}}>
-              <ButtonText className="text-base">System Settings</ButtonText>
+              <ButtonText>System Settings</ButtonText>
             </Button>
             <Button variant="outline" onPress={() => {}}>
-              <ButtonText className="text-base">Audit Logs</ButtonText>
+              <ButtonText>Audit Logs</ButtonText>
             </Button>
           </VStack>
         </Box>
 
-        <Box className="p-4 bg-card rounded-lg">
-          <Text className="text-sm text-typography-500">
-            This screen is protected by both login AND admin role. Regular users
-            cannot access this.
+        <Box className="p-4 bg-background-50 rounded-lg">
+          <Text size="sm" className="text-typography-500">
+            This screen is protected by both login AND admin role. Regular users cannot access this.
           </Text>
         </Box>
 
-        <Button variant="outline" onPress={logout}>
-          <ButtonText className="text-base">Logout</ButtonText>
+        <Button variant="outline" action="negative" onPress={() => logout()}>
+          <ButtonText>Logout</ButtonText>
         </Button>
       </VStack>
     </View>

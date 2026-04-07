@@ -6,9 +6,9 @@ import 'react-native-reanimated';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 import { useColorScheme } from '@/hooks/use-color-scheme';
-import { TodoProvider } from '@/context/todo-context';
 import { AuthProvider } from '@/context/auth-context';
 import { GluestackUIProvider } from '@/components/ui/gluestack-ui-provider';
+import { ErrorBoundary } from '@/components/error-boundary';
 
 const queryClient = new QueryClient();
 
@@ -16,10 +16,10 @@ export default function RootLayout() {
   const colorScheme = useColorScheme();
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <GluestackUIProvider mode="system">
-        <AuthProvider>
-          <TodoProvider>
+    <ErrorBoundary>
+      <QueryClientProvider client={queryClient}>
+        <GluestackUIProvider mode="system">
+          <AuthProvider>
             <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
               <Stack>
                 <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
@@ -29,9 +29,9 @@ export default function RootLayout() {
               </Stack>
               <StatusBar style="auto" />
             </ThemeProvider>
-          </TodoProvider>
-        </AuthProvider>
-      </GluestackUIProvider>
-    </QueryClientProvider>
+          </AuthProvider>
+        </GluestackUIProvider>
+      </QueryClientProvider>
+    </ErrorBoundary>
   );
 }

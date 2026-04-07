@@ -7,18 +7,18 @@ import { useColorScheme } from 'nativewind';
 import { useAuth } from '@/context/auth-context';
 
 export default function ProtectedLayout() {
-  const { isLoggedIn } = useAuth();
+  const { isLoggedIn, isLoading } = useAuth();
   const router = useRouter();
   const { colorScheme } = useColorScheme();
   const isDark = colorScheme === 'dark';
 
   useEffect(() => {
-    if (!isLoggedIn) {
+    if (!isLoading && !isLoggedIn) {
       router.replace('/login');
     }
-  }, [isLoggedIn, router]);
+  }, [isLoggedIn, isLoading, router]);
 
-  if (!isLoggedIn) {
+  if (isLoading || !isLoggedIn) {
     return (
       <View className="flex-1 items-center justify-center">
         <ActivityIndicator size="large" />
@@ -34,7 +34,7 @@ export default function ProtectedLayout() {
           backgroundColor: isDark ? '#121212' : '#ffffff',
         },
         headerTintColor: isDark ? '#fefeff' : '#171717',
-        headerBackTitleVisible: false,
+        headerBackVisible: false,
       }}>
       <Stack.Screen
         name="index"

@@ -12,8 +12,8 @@ export default function LoginScreen() {
   const { login } = useAuth();
   const router = useRouter();
 
-  const handleLogin = (role: 'admin' | 'user') => {
-    login(role);
+  const handleLogin = async (role: 'admin' | 'user') => {
+    await login(role);
     router.replace('/protected');
   };
 
